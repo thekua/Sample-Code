@@ -12,7 +12,9 @@ import java.util.List;
 
 public class LogbackCapturingAppender extends AppenderBase<ILoggingEvent> {
     public static class Factory {
-        private static List<LogbackCapturingAppender> ALL = new ArrayList<LogbackCapturingAppender>();
+        private static final List<LogbackCapturingAppender> ALL = new ArrayList<LogbackCapturingAppender>();
+
+        private Factory() {}
 
         public static LogbackCapturingAppender weaveInto(org.slf4j.Logger sl4jLogger) {
             LogbackCapturingAppender appender = new LogbackCapturingAppender(sl4jLogger);
