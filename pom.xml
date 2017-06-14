@@ -3,7 +3,7 @@
 
     <groupId>com.thekua.spikes</groupId>
     <artifactId>logback-spike</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>logback-spike</name>
@@ -16,7 +16,7 @@
         <connection>scm:git:git@github.com:schnatterer/logback-spike.git</connection>
         <developerConnection>scm:git:git@github.com:schnatterer/logback-spike.git</developerConnection>
         <url>https://github.com/schnatterer/logback-spike</url>
-      <tag>1.0.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <dependencies>
