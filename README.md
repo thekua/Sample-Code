@@ -1,5 +1,6 @@
 # logback-spike
 [![Build Status](https://travis-ci.org/schnatterer/logback-spike.svg?branch=master)](https://travis-ci.org/schnatterer/logback-spike)
+[![JitPack](https://jitpack.io/v/schnatterer/logback-spike.svg)](https://jitpack.io/#schnatterer/logback-spike)
 [![License](https://img.shields.io/github/license/schnatterer/logback-spike.svg)](LICENSE)
 
 Logback and SLF4j unit testing.
@@ -7,6 +8,8 @@ Logback and SLF4j unit testing.
 Original idea from [thekua's blog](https://www.thekua.com/atwork/2011/11/testing-logging-with-logback/), forked from [his repo](https://github.com/thekua/Sample-Code/tree/master/java/logback-spike) in order to provide it conveniently with good reuse as maven dependency.
 
 ## Usage 
+
+Get it via [JitPack](https://jitpack.io/#schnatterer/logback-spike), for example using maven.
 
 Add the following maven repository to your POM.xml
 
