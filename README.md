@@ -1,4 +1,6 @@
 # logback-spike
+[![Build Status](https://travis-ci.org/schnatterer/logback-spike.svg?branch=master)](https://travis-ci.org/schnatterer/logback-spike)
+[![License](https://img.shields.io/github/license/schnatterer/logback-spike.svg)](LICENSE)
 
 Logback and SLF4j unit testing.
 
