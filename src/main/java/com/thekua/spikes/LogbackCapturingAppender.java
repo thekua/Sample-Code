@@ -10,29 +10,73 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Logback appender that simply stores all logged messages of an {@link org.slf4j.Logger} in memory and provides methods
+ * to retrieve them, so they can be used in asserts of unit tests.
+ * <br/>
+ * Add a logger like so  <br/>
+ * {@code LogbackCapturingAppender capturing = LogbackCapturingAppender.weaveInto(OurDomainWithLogger.LOG); }
+ * <br/><br/>
+ * Retrieve any log messages using any of the following methods:
+ * <ul>
+ *     <li>{@link #getCapturedEvents()}</li>
+ *     <li>{@link #getCapturedLogMessages()}</li>
+ * </ul>
+ * <br/>
+ * If necessary remove appender instance or all {@link LogbackCapturingAppender}s using
+ *
+ * <ul>
+ *     <li>{@link #cleanUp()}</li>
+ *     <li>{@link #cleanUpAll()}</li>
+ * </ul>
+ */
 public class LogbackCapturingAppender extends AppenderBase<ILoggingEvent> {
-    public static class Factory {
-        private static final List<LogbackCapturingAppender> ALL = new ArrayList<LogbackCapturingAppender>();
+    private static final List<LogbackCapturingAppender> ALL = new ArrayList<LogbackCapturingAppender>();
 
-        private Factory() {}
+    private final Logger logger;
 
-        public static LogbackCapturingAppender weaveInto(org.slf4j.Logger sl4jLogger) {
-            LogbackCapturingAppender appender = new LogbackCapturingAppender(sl4jLogger);
-            ALL.add(appender);
-            return appender;
-        }
+    private List<ILoggingEvent> capturedEvents = new LinkedList<ILoggingEvent>();
 
-        public static void cleanUp() {
-            for (LogbackCapturingAppender appender : ALL) {
-                appender.cleanUp();
-            }
+    public static LogbackCapturingAppender weaveInto(org.slf4j.Logger sl4jLogger) {
+        LogbackCapturingAppender appender = new LogbackCapturingAppender(sl4jLogger);
+        ALL.add(appender);
+        return appender;
+    }
+
+    public static void cleanUpAll() {
+        for (LogbackCapturingAppender appender : ALL) {
+            appender.cleanUp();
         }
     }
 
-    private final Logger logger;
-    private List<ILoggingEvent> capturedEvents = new LinkedList<ILoggingEvent>();
+    public void cleanUp() {
+        logger.detachAppender(this);
+    }
 
-    public LogbackCapturingAppender(org.slf4j.Logger sl4jLogger) {
+    /**
+     * @return whole event, including log level, unformatted message, etc.
+     */
+    public List<ILoggingEvent> getCapturedEvents() {
+        return capturedEvents;
+    }
+
+    /**
+     * @return formatted message strings
+     */
+    public List<String> getCapturedLogMessages() {
+        List<String> capturedMessages = new LinkedList<String>();
+        for (ILoggingEvent capturedEvent : capturedEvents) {
+            capturedMessages.add(capturedEvent.getFormattedMessage());
+        }
+        return capturedMessages;
+    }
+
+    @Override
+    protected void append(ILoggingEvent iLoggingEvent) {
+        capturedEvents.add(iLoggingEvent);
+    }
+
+    private LogbackCapturingAppender(org.slf4j.Logger sl4jLogger) {
         this.logger = (Logger) sl4jLogger;
         connect(logger);
         detachDefaultConsoleAppender();
@@ -52,27 +96,5 @@ public class LogbackCapturingAppender extends AppenderBase<ILoggingEvent> {
         logger.setLevel(Level.ALL);
         logger.addAppender(this);
         this.start();
-    }
-
-    public List<ILoggingEvent> getCapturedEvents() {
-        return capturedEvents;
-    }
-
-    public List<String> getCapturedLogMessages() {
-        List<String> capturedMessages = new LinkedList<String>();
-        for (ILoggingEvent capturedEvent : capturedEvents) {
-            capturedMessages.add(capturedEvent.getFormattedMessage());
-        }
-        return capturedMessages;
-    }
-
-    @Override
-    protected void append(ILoggingEvent iLoggingEvent) {
-        capturedEvents.add(iLoggingEvent);
-    }
-
-    private void cleanUp() {
-        logger.detachAppender(this);
-
     }
 }

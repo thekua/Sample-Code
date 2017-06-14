@@ -11,13 +11,13 @@ import static org.junit.Assert.assertThat;
 public class LogbackCapturingAppenderTest {
     @After
     public void cleanUp() {
-        LogbackCapturingAppender.Factory.cleanUp();
+        LogbackCapturingAppender.cleanUpAll();
     }
 
     @Test
     public void shouldCaptureAGivenLogMessage() throws Exception {
         // Given
-        LogbackCapturingAppender capturing = LogbackCapturingAppender.Factory.weaveInto(OurDomainWithLogger.LOG);
+        LogbackCapturingAppender capturing = LogbackCapturingAppender.weaveInto(OurDomainWithLogger.LOG);
         OurDomainWithLogger domainClass = new OurDomainWithLogger();
 
         // when
@@ -50,10 +50,10 @@ public class LogbackCapturingAppenderTest {
     @Test
     public void shouldNotCaptureAGiveLogAfterCleanUp() throws Exception {
         // Given
-        LogbackCapturingAppender capturing = LogbackCapturingAppender.Factory.weaveInto(OurDomainWithLogger.LOG);
+        LogbackCapturingAppender capturing = LogbackCapturingAppender.weaveInto(OurDomainWithLogger.LOG);
         OurDomainWithLogger domainClass = new OurDomainWithLogger();
         domainClass.logInfo("This should be logged at info");
-        LogbackCapturingAppender.Factory.cleanUp();
+        LogbackCapturingAppender.cleanUpAll();
 
         // when
         domainClass.logInfo("This should not be logged");
@@ -64,7 +64,7 @@ public class LogbackCapturingAppenderTest {
 
     private LogbackCapturingAppender sendMultipleFormattedMessages() {
         // Given
-        LogbackCapturingAppender capturing = LogbackCapturingAppender.Factory.weaveInto(OurDomainWithLogger.LOG);
+        LogbackCapturingAppender capturing = LogbackCapturingAppender.weaveInto(OurDomainWithLogger.LOG);
         OurDomainWithLogger domainClass = new OurDomainWithLogger();
 
         // when
